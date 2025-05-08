@@ -1,0 +1,33 @@
+{
+  "Version": 1,
+  "HardwareIdentifiers": [
+    {
+      "Name": "Device_1",
+      "Value": 32
+    },
+    {
+      "Name": "Device_1~PLC_1",
+      "Value": 48
+    },
+    {
+      "Name": "Device_1~PLC_1~Card reader/writer_1",
+      "Value": 51
+    },
+    {
+      "Name": "Device_1~PLC_1~OPC UA_1",
+      "Value": 117
+    },
+    {
+      "Name": "Device_1~PLC_1~PROFINET_interface_1",
+      "Value": 64
+    },
+    {
+      "Name": "Device_1~PLC_1~PROFINET_interface_1~Port_1",
+      "Value": 65
+    },
+    {
+      "Name": "Device_1~Rail_0",
+      "Value": 256
+    }
+  ]
+}
