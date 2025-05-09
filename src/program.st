@@ -1,5 +1,5 @@
-USING SPS;
 USING System.Conversion;
+USING ProgramEdge;
 
 PROGRAM ProgramCycling
     

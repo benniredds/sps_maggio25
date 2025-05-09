@@ -1,8 +1,9 @@
 USING Siemens.Simatic.S71500.Tasks;
+USING ProgramModuli;
 
 //{OpcUa.NodeGenerator.IdType = SymbolName}
 CONFIGURATION MyConfiguration
-    TASK Main (PRIORITY := 1);
+    TASK Main (Priority := 1);
     TASK MyInterruptTask : CyclicInterrupt := (
         CycleTime := T#500ms,
         EventPriority := USINT#13
@@ -57,6 +58,17 @@ CONFIGURATION MyConfiguration
         SUB_STATUS_NO_ERROR : WORD := WORD#16#0000;
         STATUS_FINISHED_NO_ERROR : WORD := WORD#16#0000;
         ERR_RD_SYS_T : WORD := WORD#16#8600;
+    END_VAR
+
+    VAR_GLOBAL
+        {S7.extern = ReadWrite}
+        {OpcUa.AccessLevel=ReadWrite}
+        enable: BOOL;
+
+        tank : Tank;
+
+        ctrlInletOpen AT %Q0.0: BOOL;
+        ctrlOutletOpen AT %Q0.1: BOOL;
     END_VAR
 
 END_CONFIGURATION

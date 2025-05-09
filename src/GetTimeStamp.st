@@ -1,5 +1,5 @@
 USING Siemens.Simatic.S71500.Clocks;
-NAMESPACE SPS
+NAMESPACE ProgramEdge
     FUNCTION GetTimeStamp : INT
         // Function GetTimestamp
 

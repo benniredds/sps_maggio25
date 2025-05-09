@@ -1,6 +1,6 @@
 USING Siemens.Simatic.S71500.Clocks;
 USING System.DateTime;
-NAMESPACE SPS
+NAMESPACE ProgramEdge
 
     TYPE
         DTL : STRUCT

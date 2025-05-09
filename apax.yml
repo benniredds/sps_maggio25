@@ -80,11 +80,12 @@ scripts:
   
   # load the target specific hardware data (binaries) to the PLC
   hw_first_load: hwld load --input $HW_BIN_FOLDER/$PLC_NAME -t $IP_ADDRESS --username $USER_NAME --password $USER_PASSWORD -C $TLS_CONNECT_CERTFILE -M:$MASTER_PW
-  hw_load_reset: hwld load --reset-plc KeepOnlyIP -t $IP_ADDRESS --username $USER_NAME --password $USER_PASSWORD
+  hw_load_reset: hwld load --reset-plc KeepOnlyIP -t $IP_ADDRESS --username $USER_NAME --password $USER_PASSWORD #--accept-security-disclaimer
   hw_load: hwld load --input $HW_BIN_FOLDER/$PLC_NAME -t $IP_ADDRESS --username $USER_NAME --password $USER_PASSWORD
 
   # Call 'apax load' to download the builded program to the target. An 'apax build' might be required upfront
   load: sld load --input $SW_BIN_FOLDER --target $IP_ADDRESS --restart --log debug -C $TLS_CONNECT_CERTFILE --username $USER_NAME --password $USER_PASSWORD --accept-security-disclaimer
+  deltaload: sld load -m delta --input $SW_BIN_FOLDER --target $IP_ADDRESS --restart --log debug -C $TLS_CONNECT_CERTFILE --username $USER_NAME --password $USER_PASSWORD --accept-security-disclaimer
   # Call 'apax dlplc' to build and download the application to the target
   dlplc:
     - apax build
@@ -95,3 +96,33 @@ scripts:
     - apax hw_compile
     - apax hw_load
     - apax dlplc
+
+
+#other useful commands
+  hwc_install_gsdml: hwc install-gsd -i hwc
+  hwc_get_supported_devices: hwc get-supported-devices
+  hwc_get_supported_devices_properties: hwc get-supported-device-properties -o "6ES7 587-1AP00-0AB0" -v "V3.1" #> properties.txt
+  hwc_generate_config_templates:
+      - hwc generate-template-file --orderNumber "6ES7 587-1AP00-0AB0" --version "V3.1" --output "hwc\hw.templates\gen_templ_vplc.hwl.json"
+      - hwc generate-template-file --gsdFileName "gsdml-v2.31-ur-ur-20160505.xml" --gsdId "DAP 1" --output "hwc\hw.templates\gen_templ_ur.hwl.json"
+      - hwc generate-template-file --gsdFileName "GSDML-V2.42-#Siemens-PreConf_FlexGrasp_ConveyorFPLC-20241028-123308.xml" --gsdId "DAP1" --output "hwc\hw.templates\gen_templ_idevConvPlc.hwl.json"
+
+#OPCUA related
+  exportopcua: opcua-server-config interface export "bin/1500/sps_maggio25.app" -o "interfaces\vplc-flax-grasp-sps24-nodesetnew.xml"
+  #opcuaload: opcua-server-config interface install "bin/1500/ax-sps24-pickai.app" -C $COMM_CERTIFICATE -sr -t $VPLC_IP --accept-security-disclaimer
+
+#DIAG
+  vplc-run: plc-info set-mode run --target $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+  vplc-stop: plc-info set-mode stop -t $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+  vplc-mres: plc-info memory-reset -t $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+  info-vplc: plc-info inspect -t $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+  perf-cylce-vplc: perf-info cycle-time -t $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+  perf-memory-vplc: perf-info memory -t $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+  perf-com-vplc: perf-info comm-load -t $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+  aslog-vplc: diag-buff -t $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+  hwdiag-vplc: hw-diag compare -t $IP_ADDRESS -C $TLS_CONNECT_CERTFILE
+
+  # commissioning scripts
+  get-cert: plc-cert -t IP_ADDRESS -o "certificate\certificateForConnectionNew.crt"
+  reset_plc: hwld --resetPlc KeepOnlyIP --targetIP IP_ADDRESS --accept-security-disclaimer
+
